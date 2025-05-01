@@ -3,18 +3,39 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+    <!-- Глобальная настройка кодировки для всех ответов -->
     <response-character-encoding>UTF-8</response-character-encoding>
-    <!-- определение servlet'а -->
+
+    <!-- Фильтр для установки UTF-8 кодировки для запросов и ответов -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignore</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Определение сервлета -->
     <servlet>
         <servlet-name>main</servlet-name>
         <servlet-class>ru.netology.servlet.MainServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- mapping - привязка к определённому URL-->
+    <!-- Привязка сервлета к URL -->
     <servlet-mapping>
         <servlet-name>main</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 </web-app>
-
