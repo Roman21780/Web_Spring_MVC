@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Reader;
 
-@Controller
 public class PostController {
     private final PostService service;
 

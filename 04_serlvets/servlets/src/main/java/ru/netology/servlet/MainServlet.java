@@ -1,7 +1,10 @@
 package ru.netology.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import ru.netology.AppConfig;
 import ru.netology.controller.PostController;
 import ru.netology.exception.NotFoundException;
 
@@ -21,10 +24,8 @@ public class MainServlet extends HttpServlet {
 
     @Override
     public void init() {
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-        if (controller == null) {
-            throw new IllegalStateException("PostController not injected!");
-        }
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        controller = context.getBean(PostController.class);
     }
 
     @Override
