@@ -6,11 +6,8 @@
          version="4.0">
 
     <display-name>My Web Application</display-name>
-
-    <!-- Глобальная кодировка -->
     <response-character-encoding>UTF-8</response-character-encoding>
 
-    <!-- Spring Context Configuration -->
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
@@ -20,7 +17,6 @@
         <param-value>ru.netology.AppConfig</param-value>
     </context-param>
 
-    <!-- UTF-8 Filter -->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -39,21 +35,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- Spring Listener -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-
-    <!-- Main Servlet -->
-    <servlet>
-        <servlet-name>main</servlet-name>
-        <servlet-class>ru.netology.servlet.MainServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>main</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
 </web-app>
