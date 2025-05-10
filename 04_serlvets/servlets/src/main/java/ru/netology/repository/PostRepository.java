@@ -12,6 +12,13 @@ public class PostRepository {
     private final Map<Long, Post> posts = new ConcurrentHashMap<>();
     private final AtomicLong counter = new AtomicLong(1);
 
+    public PostRepository() {
+        // Инициализация тестовых данных без проверки существования
+        posts.put(1L, new Post(1L, "First post"));
+        posts.put(2L, new Post(2L, "Second post"));
+        counter.set(3L); // Устанавливаем следующий ID
+    }
+
     public List<Post> all() {
         return new ArrayList<>(posts.values());
     }

@@ -1,13 +1,15 @@
 package ru.netology.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ru.netology.exception.NotFoundException;
+import ru.netology.model.Post;
 import ru.netology.service.PostService;
+import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Reader;
-
+@RestController
+@RequestMapping("/api/posts")
 public class PostController {
     private final PostService service;
 
@@ -15,19 +17,23 @@ public class PostController {
         this.service = service;
     }
 
-    public void all(HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("All posts");
+    @GetMapping
+    public List<Post> all() {
+        return service.all();
     }
 
-    public void getById(long id, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("Post with ID: " + id);
+    @GetMapping("/{id}")
+    public Post getById(@PathVariable long id) {
+        return service.getById(id);
     }
 
-    public void save(Reader body, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("Post saved");
+    @PostMapping
+    public Post save(@RequestBody Post post) {
+        return service.save(post);
     }
 
-    public void removeById(long id, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("Post deleted: " + id);
+    @DeleteMapping("/{id}")
+    public void removeById(@PathVariable long id) {
+        service.removeById(id);
     }
 }
