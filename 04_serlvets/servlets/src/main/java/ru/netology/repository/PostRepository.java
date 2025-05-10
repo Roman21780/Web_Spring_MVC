@@ -7,6 +7,7 @@ import ru.netology.model.Post;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class PostRepository {
     private final Map<Long, Post> posts = new ConcurrentHashMap<>();
@@ -20,35 +21,40 @@ public class PostRepository {
     }
 
     public List<Post> all() {
-        return new ArrayList<>(posts.values());
+        return posts.values().stream()
+                .filter(post -> !post.isRemoved())
+                .collect(Collectors.toList());
     }
 
     public Optional<Post> getById(long id) {
-        return Optional.ofNullable(posts.get(id));
+        Post post = posts.get(id);
+        return (post == null || post.isRemoved())
+                ? Optional.empty()
+                : Optional.of(post);
     }
 
-    public synchronized Post save(Post post) {
+    public Post save(Post post) {
         if (post.getId() == 0) {
-            // new post
             long newId = counter.getAndIncrement();
             post.setId(newId);
             posts.put(newId, post);
             return post;
-        } else {
-            // Existing post
-            if (posts.containsKey(post.getId())) {
-                posts.put(post.getId(), post);
-                return post;
-            } else {
-                throw new NotFoundException("Post with id " + post.getId() + " not found");
-            }
         }
+
+        Post existing = posts.get(post.getId());
+        if (existing == null || existing.isRemoved()) {
+            throw new NotFoundException("Post not found or removed");
+        }
+
+        posts.put(post.getId(), post);
+        return post;
     }
 
-    public synchronized void removeById(long id) {
-        if (!posts.containsKey(id)) {
-            throw new NotFoundException("Post with id " + id + " not found");
+    public void removeById(long id) {
+        Post post = posts.get(id);
+        if (post == null) {
+            throw new NotFoundException("Post not found");
         }
-        posts.remove(id);
+        post.setRemoved(true);
     }
 }
